@@ -3,7 +3,9 @@ package com.StefanKuchta.BankApp.domain;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
+@Service
 public class User {
 
     @Nullable
