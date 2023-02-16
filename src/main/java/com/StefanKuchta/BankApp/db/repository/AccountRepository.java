@@ -2,6 +2,7 @@ package com.StefanKuchta.BankApp.db.repository;
 
 import com.StefanKuchta.BankApp.db.mapper.AccountRowMapper;
 import com.StefanKuchta.BankApp.domain.Account;
+import com.StefanKuchta.BankApp.service.functions.IbanGenerator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -19,6 +20,7 @@ public class AccountRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final AccountRowMapper accountRowMapper = new AccountRowMapper();
+    private final IbanGenerator ibanGenerator = new IbanGenerator();
 
     public AccountRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -34,6 +36,11 @@ public class AccountRepository {
         return jdbcTemplate.queryForObject(sql, accountRowMapper);
     }
 
+    public List<Account> getAccountIban() {
+        final String sql = "SELECT * FROM account WHERE account.iban";
+        return jdbcTemplate.query(sql, accountRowMapper);
+    }
+
     public Integer createAccount(Account account) {
         final String sql = "INSERT INTO account (user_id, iban, name, balance) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -42,7 +49,12 @@ public class AccountRepository {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, account.getUserId());
-                ps.setString(2, account.getIban());
+//                while(true) {
+//                    if(ibanGenerator.generateIban().equals(getAccountIban())) {
+//                        ibanGenerator.generateIban();
+//                    }
+//                }
+                ps.setString(2, ibanGenerator.generateIban());
                 ps.setString(3, account.getName());
                 ps.setDouble(4, 0);
                 return ps;
