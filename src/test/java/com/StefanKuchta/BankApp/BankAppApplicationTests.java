@@ -1,4 +1,4 @@
-package sk.stevo.BankApp;
+package com.StefanKuchta.BankApp;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

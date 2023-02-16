@@ -1,4 +1,4 @@
-package sk.stevo.BankApp;
+package com.StefanKuchta.BankApp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
