@@ -36,31 +36,22 @@ public class AccountRepository {
         return jdbcTemplate.queryForObject(sql, accountRowMapper);
     }
 
-    public List<Account> getAccountIban() {
-        final String sql = "SELECT * FROM account WHERE account.iban";
-        return jdbcTemplate.query(sql, accountRowMapper);
-    }
-
     public Integer createAccount(Account account) {
         final String sql = "INSERT INTO account (user_id, iban, name, balance) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
+
         jdbcTemplate.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, account.getUserId());
-//                while(true) {
-//                    if(ibanGenerator.generateIban().equals(getAccountIban())) {
-//                        ibanGenerator.generateIban();
-//                    }
-//                }
                 ps.setString(2, ibanGenerator.generateIban());
                 ps.setString(3, account.getName());
                 ps.setDouble(4, 0);
                 return ps;
             }
         }, keyHolder);
-        if(keyHolder.getKey() != null) {
+        if (keyHolder.getKey() != null) {
             return keyHolder.getKey().intValue();
         } else {
             return null;

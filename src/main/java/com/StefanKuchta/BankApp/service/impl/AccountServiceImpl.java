@@ -1,12 +1,13 @@
 package com.StefanKuchta.BankApp.service.impl;
 
-import com.StefanKuchta.BankApp.db.mapper.AccountRowMapper;
 import com.StefanKuchta.BankApp.db.repository.AccountRepository;
 import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.service.api.AccountService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;

@@ -7,7 +7,11 @@ public class IbanGenerator {
     public String generateIban() {
         StringBuilder ibanNumber = new StringBuilder();
         ibanNumber.append("SK77 7700 0000 00");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
+            if(i == 2 || i == 7) {
+                ibanNumber.append(" ");
+                continue;
+            }
             int randomNumber = getRandomValue(1,9);
             ibanNumber.append(randomNumber);
         }
