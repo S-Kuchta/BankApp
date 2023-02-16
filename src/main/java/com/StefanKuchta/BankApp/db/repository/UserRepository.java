@@ -25,7 +25,7 @@ public class UserRepository {
     }
 
     public User getUserById(int id) {
-        final String sql = "SELECT * FROM user WHERE user.id" + id;
+        final String sql = "SELECT * FROM user WHERE user.id = " + id;
         try {
             return jdbcTemplate.queryForObject(sql, userRowMapper);
         } catch (EmptyResultDataAccessException e) {

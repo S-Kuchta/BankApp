@@ -24,7 +24,7 @@ public class UserController {
         if(id != null) {
             return new ResponseEntity<>(id, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null ,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -32,6 +32,16 @@ public class UserController {
     public ResponseEntity getAllUsers() {
         List<User> userList = userService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity getUserById(@PathVariable("id") int id) {
+        User user = userService.getUserById(id);
+        if(user == null) {
+            return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
     }
 }
 
