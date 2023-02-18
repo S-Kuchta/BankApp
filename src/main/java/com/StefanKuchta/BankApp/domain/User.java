@@ -5,6 +5,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class User {
 
@@ -73,5 +75,16 @@ public class User {
         this.telNumber = telNumber;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email) && telNumber.equals(user.telNumber);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, telNumber);
+    }
 }
