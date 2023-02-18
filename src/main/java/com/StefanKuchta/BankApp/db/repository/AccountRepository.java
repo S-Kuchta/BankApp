@@ -36,6 +36,11 @@ public class AccountRepository {
         return jdbcTemplate.queryForObject(sql, accountRowMapper);
     }
 
+    public Long getIdFromIban(String iban) {
+        final String sql = "SELECT id FROM account WHERE iban = " + iban;
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
+
     public Double getBalance(long accountId) {
         final String sql = "SELECT balance FROM account WHERE account.id = " + accountId;
         try {

@@ -10,30 +10,33 @@ public class Payment {
 
     @Nullable
     private Long id;
-
-    @NonNull
+    @Nullable
     private Long accountId;
     @NonNull
-    private String iban;
+    private String payerIban;
+    @NonNull
+    private String receiverIban;
     @NonNull
     private Double amount;
-    @NonNull
+    @Nullable
     private String information;
-    @NonNull
-    private Timestamp payedAt;
     @Nullable
     private Integer variableNumber;
+    @NonNull
+    private Timestamp payedAt;
+
 
     public Payment() {
     }
 
-    public Payment(@NonNull Long accountId, @NonNull String iban, @NonNull Double amount, @Nullable String information, @NonNull Timestamp payedAt, @Nullable Integer variableNumber) {
+    public Payment(@Nullable Long accountId, @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt) {
         this.accountId = accountId;
-        this.iban = iban;
+        this.payerIban = payerIban;
+        this.receiverIban = receiverIban;
         this.amount = amount;
         this.information = information;
-        this.payedAt = payedAt;
         this.variableNumber = variableNumber;
+        this.payedAt = payedAt;
     }
 
     @Nullable
@@ -45,22 +48,31 @@ public class Payment {
         this.id = id;
     }
 
-    @NonNull
+    @Nullable
     public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(@NonNull Long accountId) {
+    public void setAccountId(@Nullable Long accountId) {
         this.accountId = accountId;
     }
 
     @NonNull
-    public String getIban() {
-        return iban;
+    public String getPayerIban() {
+        return payerIban;
     }
 
-    public void setIban(@NonNull String iban) {
-        this.iban = iban;
+    public void setPayerIban(@NonNull String payerIban) {
+        this.payerIban = payerIban;
+    }
+
+    @NonNull
+    public String getReceiverIban() {
+        return receiverIban;
+    }
+
+    public void setReceiverIban(@NonNull String receiverIban) {
+        this.receiverIban = receiverIban;
     }
 
     @NonNull
@@ -72,22 +84,13 @@ public class Payment {
         this.amount = amount;
     }
 
-    @NonNull
+    @Nullable
     public String getInformation() {
         return information;
     }
 
-    public void setInformation(@NonNull String information) {
+    public void setInformation(@Nullable String information) {
         this.information = information;
-    }
-
-    @NonNull
-    public Timestamp getPayedAt() {
-        return payedAt;
-    }
-
-    public void setPayedAt(@NonNull Timestamp payedAt) {
-        this.payedAt = payedAt;
     }
 
     @Nullable
@@ -99,22 +102,32 @@ public class Payment {
         this.variableNumber = variableNumber;
     }
 
+    @NonNull
+    public Timestamp getPayedAt() {
+        return payedAt;
+    }
+
+    public void setPayedAt(@NonNull Timestamp payedAt) {
+        this.payedAt = payedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
         return Objects.equals(id, payment.id)
-                && accountId.equals(payment.accountId)
-                && iban.equals(payment.iban)
+                && Objects.equals(accountId, payment.accountId)
+                && payerIban.equals(payment.payerIban)
+                && receiverIban.equals(payment.receiverIban)
                 && amount.equals(payment.amount)
-                && information.equals(payment.information)
-                && payedAt.equals(payment.payedAt)
-                && Objects.equals(variableNumber, payment.variableNumber);
+                && Objects.equals(information, payment.information)
+                && Objects.equals(variableNumber, payment.variableNumber)
+                && payedAt.equals(payment.payedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountId, iban, amount, information, payedAt, variableNumber);
+        return Objects.hash(id, accountId, payerIban, receiverIban, amount, information, variableNumber, payedAt);
     }
 }
