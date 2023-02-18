@@ -24,12 +24,14 @@ public class Payment {
     private Integer variableNumber;
     @NonNull
     private Timestamp payedAt;
+    @NonNull
+    private String type;
 
 
     public Payment() {
     }
 
-    public Payment(@Nullable Long accountId, @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt) {
+    public Payment(@Nullable Long accountId, @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
         this.accountId = accountId;
         this.payerIban = payerIban;
         this.receiverIban = receiverIban;
@@ -37,6 +39,7 @@ public class Payment {
         this.information = information;
         this.variableNumber = variableNumber;
         this.payedAt = payedAt;
+        this.type = type;
     }
 
     @Nullable
@@ -111,6 +114,15 @@ public class Payment {
         this.payedAt = payedAt;
     }
 
+    @NonNull
+    public String getType() {
+        return type;
+    }
+
+    public void setType(@NonNull String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,11 +135,12 @@ public class Payment {
                 && amount.equals(payment.amount)
                 && Objects.equals(information, payment.information)
                 && Objects.equals(variableNumber, payment.variableNumber)
-                && payedAt.equals(payment.payedAt);
+                && payedAt.equals(payment.payedAt)
+                && type.equals(payment.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountId, payerIban, receiverIban, amount, information, variableNumber, payedAt);
+        return Objects.hash(id, accountId, payerIban, receiverIban, amount, information, variableNumber, payedAt, type);
     }
 }
