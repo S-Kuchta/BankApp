@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class User {
 
     @Nullable
-    private Integer id;
+    private Long id;
     @NonNull
     private String name;
     @NonNull
@@ -29,11 +29,11 @@ public class User {
     }
 
     @Nullable
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@Nullable Integer id) {
+    public void setId(@Nullable Long id) {
         this.id = id;
     }
 

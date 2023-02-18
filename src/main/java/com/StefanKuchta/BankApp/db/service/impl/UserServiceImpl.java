@@ -1,8 +1,8 @@
-package com.StefanKuchta.BankApp.service.impl;
+package com.StefanKuchta.BankApp.db.service.impl;
 
 import com.StefanKuchta.BankApp.db.repository.UserRepository;
 import com.StefanKuchta.BankApp.domain.User;
-import com.StefanKuchta.BankApp.service.api.UserService;
+import com.StefanKuchta.BankApp.db.service.api.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(int id) {
+    public User getUserById(long id) {
         return userRepository.getUserById(id);
     }
 
     @Override
-    public Integer addUserAndReturnId(User user) {
+    public Long addUserAndReturnId(User user) {
         return userRepository.addUserAndReturnId(user);
     }
 }

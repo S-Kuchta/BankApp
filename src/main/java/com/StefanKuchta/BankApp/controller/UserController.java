@@ -1,7 +1,7 @@
 package com.StefanKuchta.BankApp.controller;
 
 import com.StefanKuchta.BankApp.domain.User;
-import com.StefanKuchta.BankApp.service.api.UserService;
+import com.StefanKuchta.BankApp.db.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity addUser(@RequestBody User user) {
-        Integer id = userService.addUserAndReturnId(user);
+    public ResponseEntity<Long> addUser(@RequestBody User user) {
+        Long id = userService.addUserAndReturnId(user);
         if(id != null) {
             return new ResponseEntity<>(id, HttpStatus.CREATED);
         } else {
@@ -29,13 +29,13 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         List<User> userList = userService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity getUserById(@PathVariable("id") int id ) {
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id ) {
         User user = userService.getUserById(id);
         if(user == null) {
             return  new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

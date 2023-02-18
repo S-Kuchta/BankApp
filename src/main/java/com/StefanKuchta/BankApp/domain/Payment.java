@@ -9,10 +9,10 @@ import java.util.Objects;
 public class Payment {
 
     @Nullable
-    private Integer id;
+    private Long id;
 
     @NonNull
-    private Integer accountId;
+    private Long accountId;
     @NonNull
     private String iban;
     @NonNull
@@ -21,33 +21,36 @@ public class Payment {
     private String information;
     @NonNull
     private Timestamp payedAt;
+    @Nullable
+    private Integer variableNumber;
 
     public Payment() {
     }
 
-    public Payment(@NonNull Integer accountId, @NonNull String iban, @NonNull Double amount, @NonNull String information, @NonNull Timestamp payedAt) {
+    public Payment(@NonNull Long accountId, @NonNull String iban, @NonNull Double amount, @Nullable String information, @NonNull Timestamp payedAt, @Nullable Integer variableNumber) {
         this.accountId = accountId;
         this.iban = iban;
         this.amount = amount;
         this.information = information;
         this.payedAt = payedAt;
+        this.variableNumber = variableNumber;
     }
 
     @Nullable
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@Nullable Integer id) {
+    public void setId(@Nullable Long id) {
         this.id = id;
     }
 
     @NonNull
-    public Integer getAccountId() {
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(@NonNull Integer accountId) {
+    public void setAccountId(@NonNull Long accountId) {
         this.accountId = accountId;
     }
 
@@ -87,16 +90,31 @@ public class Payment {
         this.payedAt = payedAt;
     }
 
+    @Nullable
+    public Integer getVariableNumber() {
+        return variableNumber;
+    }
+
+    public void setVariableNumber(@Nullable Integer variableNumber) {
+        this.variableNumber = variableNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Objects.equals(id, payment.id) && accountId.equals(payment.accountId) && iban.equals(payment.iban) && amount.equals(payment.amount) && information.equals(payment.information) && payedAt.equals(payment.payedAt);
+        return Objects.equals(id, payment.id)
+                && accountId.equals(payment.accountId)
+                && iban.equals(payment.iban)
+                && amount.equals(payment.amount)
+                && information.equals(payment.information)
+                && payedAt.equals(payment.payedAt)
+                && Objects.equals(variableNumber, payment.variableNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountId, iban, amount, information, payedAt);
+        return Objects.hash(id, accountId, iban, amount, information, payedAt, variableNumber);
     }
 }

@@ -1,4 +1,4 @@
-package com.StefanKuchta.BankApp.service.functions;
+package com.StefanKuchta.BankApp.db.service.functions;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -6,12 +6,12 @@ public class IbanGenerator {
 
     public String generateIban() {
         StringBuilder ibanNumber = new StringBuilder();
-        ibanNumber.append("SK77 7700 0000 00");
-        for (int i = 0; i < 12; i++) {
-            if(i == 2 || i == 7) {
-                ibanNumber.append(" ");
-                continue;
-            }
+        ibanNumber.append("SK227700000000");
+        for (int i = 0; i < 10; i++) {
+//            if(i == 2 || i == 7) {
+//                ibanNumber.append(" ");
+//                continue;
+//            }
             int randomNumber = getRandomValue(1,9);
             ibanNumber.append(randomNumber);
         }

@@ -1,4 +1,4 @@
-package com.StefanKuchta.BankApp.service.api;
+package com.StefanKuchta.BankApp.db.service.api;
 
 import com.StefanKuchta.BankApp.domain.Account;
 import org.springframework.lang.Nullable;
@@ -10,9 +10,9 @@ public interface AccountService {
     List<Account> getAllAccounts();
 
     @Nullable
-    Account getAccountById(int id);
+    Account getAccountById(long id);
 
     @Nullable
-    Integer addUserAndReturnId(Account account);
+    Long addUserAndReturnId(Account account);
 
 }

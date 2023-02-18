@@ -1,4 +1,4 @@
-package com.StefanKuchta.BankApp.service.api;
+package com.StefanKuchta.BankApp.db.service.api;
 
 import com.StefanKuchta.BankApp.domain.User;
 import org.springframework.lang.Nullable;
@@ -9,8 +9,8 @@ public interface UserService {
     List<User> getAllUsers();
 
     @Nullable
-    User getUserById(int id);
+    User getUserById(long id);
 
     @Nullable
-    Integer addUserAndReturnId(User user);
+    Long addUserAndReturnId(User user);
 }

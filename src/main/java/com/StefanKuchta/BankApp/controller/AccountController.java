@@ -1,7 +1,7 @@
 package com.StefanKuchta.BankApp.controller;
 
 import com.StefanKuchta.BankApp.domain.Account;
-import com.StefanKuchta.BankApp.service.api.AccountService;
+import com.StefanKuchta.BankApp.db.service.api.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,24 +19,24 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity createAccount(@RequestBody Account account) {
-        Integer id = accountService.addUserAndReturnId(account);
+    public ResponseEntity<Long> createAccount(@RequestBody Account account) {
+        Long id = accountService.addUserAndReturnId(account);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity getAllAccounts() {
+    public ResponseEntity<List<Account>> getAllAccounts() {
         List<Account> accountList = accountService.getAllAccounts();
-        return new ResponseEntity(accountList, HttpStatus.OK);
+        return new ResponseEntity<>(accountList, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity getAccountById(@PathVariable("id") int id) {
+    public ResponseEntity<Account> getAccountById(@PathVariable("id") long id) {
         Account account = accountService.getAccountById(id);
         if(account == null) {
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity(account, HttpStatus.OK);
+            return new ResponseEntity<>(account, HttpStatus.OK);
         }
     }
 }

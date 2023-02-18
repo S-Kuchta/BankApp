@@ -24,7 +24,7 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public User getUserById(int id) {
+    public User getUserById(long id) {
         final String sql = "SELECT * FROM user WHERE user.id = " + id;
         try {
             return jdbcTemplate.queryForObject(sql, userRowMapper);
@@ -38,7 +38,7 @@ public class UserRepository {
         return jdbcTemplate.query(sql, userRowMapper);
     }
 
-    public Integer addUserAndReturnId(User user) {
+    public Long addUserAndReturnId(User user) {
         final String sql = "INSERT INTO user(name, surname, email, tel_number) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -53,9 +53,8 @@ public class UserRepository {
                 return ps;
             }
         }, keyHolder);
-
         if(keyHolder.getKey() != null) {
-            return keyHolder.getKey().intValue();
+            return keyHolder.getKey().longValue();
         } else {
             return null;
         }
