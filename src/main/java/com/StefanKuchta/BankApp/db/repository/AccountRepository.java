@@ -3,6 +3,7 @@ package com.StefanKuchta.BankApp.db.repository;
 import com.StefanKuchta.BankApp.db.mapper.AccountRowMapper;
 import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.db.service.functions.IbanGenerator;
+import com.StefanKuchta.BankApp.domain.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -47,6 +48,28 @@ public class AccountRepository {
                 ps.setLong(1, account.getUserId());
                 ps.setString(2, ibanGenerator.generateIban());
                 ps.setString(3, account.getName());
+                ps.setDouble(4, 0);
+                return ps;
+            }
+        }, keyHolder);
+        if (keyHolder.getKey() != null) {
+            return keyHolder.getKey().longValue();
+        } else {
+            return null;
+        }
+    }
+
+    public Long createAccountWithUserCreate(Long id) {
+        final String sql = "INSERT INTO account (user_id, iban, name, balance) VALUES (?,?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                ps.setLong(1, id);
+                ps.setString(2, ibanGenerator.generateIban());
+                ps.setString(3, "bank account");
                 ps.setDouble(4, 0);
                 return ps;
             }

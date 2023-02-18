@@ -1,5 +1,6 @@
 package com.StefanKuchta.BankApp.db.service.impl;
 
+import com.StefanKuchta.BankApp.db.repository.AccountRepository;
 import com.StefanKuchta.BankApp.db.repository.UserRepository;
 import com.StefanKuchta.BankApp.domain.User;
 import com.StefanKuchta.BankApp.db.service.api.UserService;
@@ -11,11 +12,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private User user;
+    private final AccountRepository accountRepository;
 
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -30,6 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long addUserAndReturnId(User user) {
-        return userRepository.addUserAndReturnId(user);
+        Long userId = userRepository.addUserAndReturnId(user);
+        Long accountId = accountRepository.createAccountWithUserCreate(userId);
+        return userId;
     }
 }
