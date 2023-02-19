@@ -9,55 +9,73 @@ import java.util.Objects;
 public class Payment {
 
     @Nullable
-    private Integer id;
-
+    private Long id;
+    @Nullable
+    private Long accountId;
     @NonNull
-    private Integer accountId;
+    private String payerIban;
     @NonNull
-    private String iban;
+    private String receiverIban;
     @NonNull
     private Double amount;
-    @NonNull
+    @Nullable
     private String information;
+    @Nullable
+    private Integer variableNumber;
     @NonNull
     private Timestamp payedAt;
+    @NonNull
+    private String type;
+
 
     public Payment() {
     }
 
-    public Payment(@NonNull Integer accountId, @NonNull String iban, @NonNull Double amount, @NonNull String information, @NonNull Timestamp payedAt) {
-        this.accountId = accountId;
-        this.iban = iban;
+    public Payment(/*@Nullable Long accountId,*/ @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
+//        this.accountId = accountId;
+        this.payerIban = payerIban;
+        this.receiverIban = receiverIban;
         this.amount = amount;
         this.information = information;
+        this.variableNumber = variableNumber;
         this.payedAt = payedAt;
+        this.type = type;
     }
 
     @Nullable
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@Nullable Integer id) {
+    public void setId(@Nullable Long id) {
         this.id = id;
     }
 
-    @NonNull
-    public Integer getAccountId() {
+    @Nullable
+    public Long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(@NonNull Integer accountId) {
+    public void setAccountId(@Nullable Long accountId) {
         this.accountId = accountId;
     }
 
     @NonNull
-    public String getIban() {
-        return iban;
+    public String getPayerIban() {
+        return payerIban;
     }
 
-    public void setIban(@NonNull String iban) {
-        this.iban = iban;
+    public void setPayerIban(@NonNull String payerIban) {
+        this.payerIban = payerIban;
+    }
+
+    @NonNull
+    public String getReceiverIban() {
+        return receiverIban;
+    }
+
+    public void setReceiverIban(@NonNull String receiverIban) {
+        this.receiverIban = receiverIban;
     }
 
     @NonNull
@@ -69,13 +87,22 @@ public class Payment {
         this.amount = amount;
     }
 
-    @NonNull
+    @Nullable
     public String getInformation() {
         return information;
     }
 
-    public void setInformation(@NonNull String information) {
+    public void setInformation(@Nullable String information) {
         this.information = information;
+    }
+
+    @Nullable
+    public Integer getVariableNumber() {
+        return variableNumber;
+    }
+
+    public void setVariableNumber(@Nullable Integer variableNumber) {
+        this.variableNumber = variableNumber;
     }
 
     @NonNull
@@ -87,16 +114,33 @@ public class Payment {
         this.payedAt = payedAt;
     }
 
+    @NonNull
+    public String getType() {
+        return type;
+    }
+
+    public void setType(@NonNull String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Objects.equals(id, payment.id) && accountId.equals(payment.accountId) && iban.equals(payment.iban) && amount.equals(payment.amount) && information.equals(payment.information) && payedAt.equals(payment.payedAt);
+        return Objects.equals(id, payment.id)
+                && Objects.equals(accountId, payment.accountId)
+                && payerIban.equals(payment.payerIban)
+                && receiverIban.equals(payment.receiverIban)
+                && amount.equals(payment.amount)
+                && Objects.equals(information, payment.information)
+                && Objects.equals(variableNumber, payment.variableNumber)
+                && payedAt.equals(payment.payedAt)
+                && type.equals(payment.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, accountId, iban, amount, information, payedAt);
+        return Objects.hash(id, accountId, payerIban, receiverIban, amount, information, variableNumber, payedAt, type);
     }
 }

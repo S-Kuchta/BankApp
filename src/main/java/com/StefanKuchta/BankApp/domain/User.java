@@ -3,11 +3,15 @@ package com.StefanKuchta.BankApp.domain;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
 
 public class User {
 
     @Nullable
-    private Integer id;
+    private Long id;
     @NonNull
     private String name;
     @NonNull
@@ -27,11 +31,11 @@ public class User {
     }
 
     @Nullable
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@Nullable Integer id) {
+    public void setId(@Nullable Long id) {
         this.id = id;
     }
 
@@ -71,5 +75,16 @@ public class User {
         this.telNumber = telNumber;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && name.equals(user.name) && surname.equals(user.surname) && email.equals(user.email) && telNumber.equals(user.telNumber);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, telNumber);
+    }
 }

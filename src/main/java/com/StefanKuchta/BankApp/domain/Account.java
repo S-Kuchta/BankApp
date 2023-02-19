@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Account {
 
     @Nullable
-    private Integer id;
+    private Long id;
     @NonNull
-    private Integer userId;
+    private Long userId;
     @NonNull
     private String iban;
     @NonNull
@@ -21,7 +21,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(@NonNull Integer userId, @NonNull String iban, @NonNull String name, @NonNull Double balance) {
+    public Account(@NonNull Long userId, @NonNull String iban, @NonNull String name, @NonNull Double balance) {
         this.userId = userId;
         this.iban = iban;
         this.name = name;
@@ -29,20 +29,20 @@ public class Account {
     }
 
     @Nullable
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@Nullable Integer id) {
+    public void setId(@Nullable Long id) {
         this.id = id;
     }
 
     @NonNull
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(@NonNull Integer userId) {
+    public void setUserId(@NonNull Long userId) {
         this.userId = userId;
     }
 
