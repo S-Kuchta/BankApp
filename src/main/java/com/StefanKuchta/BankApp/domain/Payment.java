@@ -31,8 +31,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(@Nullable Long accountId, @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
-        this.accountId = accountId;
+    public Payment(/*@Nullable Long accountId,*/ @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
+//        this.accountId = accountId;
         this.payerIban = payerIban;
         this.receiverIban = receiverIban;
         this.amount = amount;

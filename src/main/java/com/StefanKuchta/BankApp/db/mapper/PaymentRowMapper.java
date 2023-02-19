@@ -14,11 +14,14 @@ public class PaymentRowMapper implements RowMapper<Payment> {
 
         payment.setId(rs.getLong("id"));
         payment.setAccountId(rs.getLong("account_id"));
-        payment.setIban(rs.getString("iban"));
+        payment.setPayerIban(rs.getString("payer_iban"));
+        payment.setReceiverIban(rs.getString("receiver_iban"));
         payment.setAmount(rs.getDouble("amount"));
         payment.setInformation(rs.getString("information"));
-        payment.setPayedAt(rs.getTimestamp("payed_at"));
         payment.setVariableNumber(rs.getInt("variable_number"));
+        payment.setPayedAt(rs.getTimestamp("payed_at"));
+        payment.setType(rs.getString("type"));
+
         return payment;
 
     }

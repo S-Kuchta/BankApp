@@ -5,6 +5,7 @@ import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.db.service.functions.IbanGenerator;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -37,8 +38,12 @@ public class AccountRepository {
     }
 
     public Long getIdFromIban(String iban) {
-        final String sql = "SELECT id FROM account WHERE iban = " + iban;
-        return jdbcTemplate.queryForObject(sql, Long.class);
+        final String sql = "SELECT id FROM account WHERE account.iban = '" + iban + "'";
+        try {
+            return jdbcTemplate.queryForObject(sql, Long.class);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public Double getBalance(long accountId) {

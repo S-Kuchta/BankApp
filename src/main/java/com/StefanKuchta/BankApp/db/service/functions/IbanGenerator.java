@@ -15,7 +15,7 @@ public class IbanGenerator {
             int randomNumber = getRandomValue(1,9);
             ibanNumber.append(randomNumber);
         }
-        return ibanNumber.toString();
+        return ibanNumber.toString().trim();
     }
 
     public int getRandomValue(int Min, int Max) {
