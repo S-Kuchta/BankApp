@@ -30,7 +30,8 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Long receivePayment(Payment payment) {
         Long accountId = accountRepository.getIdFromIban(payment.getReceiverIban());
-        Double totalBalance = accountRepository.getBalance(accountId) + payment.getAmount();
+        double totalBalance = accountRepository.getBalance(accountId) + payment.getAmount();
+
         if(CheckIfIbanBelongToBank.ibanCheck(payment.getReceiverIban())) {
             accountRepository.setBalance(accountId, totalBalance);
             return paymentRepository.addPaymentToPaymentHistory(payment, accountId);

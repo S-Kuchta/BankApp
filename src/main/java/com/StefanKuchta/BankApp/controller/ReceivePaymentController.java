@@ -22,6 +22,10 @@ public class ReceivePaymentController {
     @PostMapping
     public ResponseEntity<Long> receivePayment(@RequestBody Payment payment) {
         Long id = paymentService.receivePayment(payment);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        if(id == null) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        }
     }
 }
