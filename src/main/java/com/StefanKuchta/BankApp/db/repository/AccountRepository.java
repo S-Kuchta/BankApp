@@ -37,6 +37,21 @@ public class AccountRepository {
         return jdbcTemplate.queryForObject(sql, accountRowMapper);
     }
 
+    public boolean checkIfAccountExist(String iban) {
+//        final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
+        try {
+
+            final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
+            jdbcTemplate.execute(sql);
+//            jdbcTemplate.queryForObject(sql, Boolean.class);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+//        String ibanExist = String.valueOf(jdbcTemplate.queryForObject(sql, accountRowMapper));
+//        return ibanExist != null;
+    }
+
     public Long getIdFromIban(String iban) {
         final String sql = "SELECT id FROM account WHERE account.iban = '" + iban + "'";
         try {

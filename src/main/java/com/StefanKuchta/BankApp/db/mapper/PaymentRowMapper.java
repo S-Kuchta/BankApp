@@ -18,7 +18,7 @@ public class PaymentRowMapper implements RowMapper<Payment> {
         payment.setReceiverIban(rs.getString("receiver_iban"));
         payment.setAmount(rs.getDouble("amount"));
         payment.setInformation(rs.getString("information"));
-        payment.setVariableNumber(rs.getInt("variable_number"));
+        payment.setVariableNumber(rs.getString("variable_number"));
         payment.setPayedAt(rs.getTimestamp("payed_at"));
         payment.setType(rs.getString("type"));
 
