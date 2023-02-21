@@ -1,6 +1,7 @@
 package com.StefanKuchta.BankApp.db.service.impl;
 
 import com.StefanKuchta.BankApp.db.repository.AccountRepository;
+import com.StefanKuchta.BankApp.db.repository.CentralIbanDbRepository;
 import com.StefanKuchta.BankApp.db.repository.UserRepository;
 import com.StefanKuchta.BankApp.domain.User;
 import com.StefanKuchta.BankApp.db.service.api.UserService;
@@ -13,11 +14,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
+    private final CentralIbanDbRepository centralIbanDbRepository;
 
 
-    public UserServiceImpl(UserRepository userRepository, AccountRepository accountRepository) {
+    public UserServiceImpl(UserRepository userRepository, AccountRepository accountRepository, CentralIbanDbRepository centralIbanDbRepository) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
+        this.centralIbanDbRepository = centralIbanDbRepository;
     }
 
     @Override
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService {
     public Long addUserAndReturnId(User user) {
         Long userId = userRepository.addUserAndReturnId(user);
         Long accountId = accountRepository.createAccountWithUserCreate(userId);
+        centralIbanDbRepository.addIbanToCentralIbanDb(accountRepository.getIbanFromId(accountId));
         return userId;
     }
 }

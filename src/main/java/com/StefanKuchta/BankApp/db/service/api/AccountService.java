@@ -13,6 +13,6 @@ public interface AccountService {
     Account getAccountById(long id);
 
     @Nullable
-    Long addUserAndReturnId(Account account);
+    Long addAccountAndReturnId(Account account);
 
 }
