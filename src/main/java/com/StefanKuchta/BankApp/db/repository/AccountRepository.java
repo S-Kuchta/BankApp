@@ -7,12 +7,14 @@ import com.StefanKuchta.BankApp.db.service.functions.IbanGenerator;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -38,19 +40,24 @@ public class AccountRepository {
     }
 
     public boolean checkIfAccountExist(String iban) {
-//        final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
+        final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
         try {
-
-            final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
-            jdbcTemplate.execute(sql);
-//            jdbcTemplate.queryForObject(sql, Boolean.class);
+            jdbcTemplate.queryForObject(sql, String.class);
             return true;
         } catch (EmptyResultDataAccessException e) {
             return false;
         }
-//        String ibanExist = String.valueOf(jdbcTemplate.queryForObject(sql, accountRowMapper));
-//        return ibanExist != null;
     }
+
+//    public boolean checkIfAccountExist(String iban) {
+//        final String sql = "SELECT iban FROM account WHERE account.iban = ?";
+//        try {
+//            jdbcTemplate.queryForObject(sql, new Object[] { iban }, String.class);
+//            return true;
+//        } catch (EmptyResultDataAccessException e) {
+//            return false;
+//        }
+//    }
 
     public Long getIdFromIban(String iban) {
         final String sql = "SELECT id FROM account WHERE account.iban = '" + iban + "'";
@@ -101,7 +108,13 @@ public class AccountRepository {
         jdbcTemplate.update((Connection con) -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setLong(1, account.getUserId());
-            ps.setString(2, ibanGenerator.generateIban());
+            String iban = ibanGenerator.generateIban();
+            if (checkIfAccountExist(iban)) {
+                while (checkIfAccountExist(iban)) {
+                    iban = ibanGenerator.generateIban();
+                }
+            }
+            ps.setString(2, /*ibanGenerator.generateIban()*/iban);
             ps.setString(3, account.getName());
             ps.setDouble(4, 0);
             return ps;
