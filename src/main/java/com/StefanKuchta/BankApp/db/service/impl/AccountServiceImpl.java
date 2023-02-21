@@ -34,6 +34,5 @@ public class AccountServiceImpl implements AccountService {
         Long id = accountRepository.createAccountAndReturnGeneratedId(account);
         centralIbanDbRepository.addIbanToCentralIbanDb(accountRepository.getIbanFromId(id));
         return id;
-//        return accountRepository.createAccountAndReturnGeneratedId(account);
     }
 }

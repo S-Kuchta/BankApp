@@ -1,7 +1,7 @@
 package com.StefanKuchta.BankApp.db.service.functions;
 
 
-public class CheckIfIbanBelongToBank {
+public class CheckIfIbanBelongsToBank {
     public static boolean ibanCheck(String iban) {
         
         String numbers = iban.substring(4, 8);

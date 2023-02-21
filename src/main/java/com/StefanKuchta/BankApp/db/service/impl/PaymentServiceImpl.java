@@ -7,9 +7,8 @@ import com.StefanKuchta.BankApp.db.service.api.PaymentService;
 import com.StefanKuchta.BankApp.db.service.api.response.SendPaymentResponse;
 
 import com.StefanKuchta.BankApp.db.service.enums.TransactionType;
-import com.StefanKuchta.BankApp.db.service.functions.CheckIfIbanBelongToBank;
+import com.StefanKuchta.BankApp.db.service.functions.CheckIfIbanBelongsToBank;
 import com.StefanKuchta.BankApp.domain.Payment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class PaymentServiceImpl implements PaymentService {
         Long receiverId = accountRepository.getIdFromIban(payment.getReceiverIban());
         double totalReceiverBalance = accountRepository.getBalance(receiverId) + payment.getAmount();
 
-        if(CheckIfIbanBelongToBank.ibanCheck(payment.getReceiverIban())) {
+        if(CheckIfIbanBelongsToBank.ibanCheck(payment.getReceiverIban())) {
             accountRepository.setBalance(receiverId, totalReceiverBalance);
             return paymentRepository.addPaymentToPaymentHistory(payment, receiverId, TransactionType.CREDIT.getType());
         } else {
@@ -73,5 +72,7 @@ public class PaymentServiceImpl implements PaymentService {
 //        payment.setPayerIban(BeautyIban.beautyIban(payment.getPayerIban()));
 //        payment.setReceiverIban(BeautyIban.beautyIban(payment.getReceiverIban()));
         return paymentRepository.getAllPayments();
+
+
     }
 }
