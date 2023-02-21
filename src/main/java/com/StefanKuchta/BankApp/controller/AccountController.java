@@ -20,7 +20,7 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Long> createAccount(@RequestBody Account account) {
-        Long id = accountService.addUserAndReturnId(account);
+        Long id = accountService.addAccountAndReturnId(account);
         return new ResponseEntity<>(id, HttpStatus.CREATED);
     }
 

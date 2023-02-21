@@ -21,7 +21,7 @@ public class Payment {
     @Nullable
     private String information;
     @Nullable
-    private Integer variableNumber;
+    private String variableNumber;
     @NonNull
     private Timestamp payedAt;
     @NonNull
@@ -31,7 +31,7 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(/*@Nullable Long accountId,*/ @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable Integer variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
+    public Payment(/*@Nullable Long accountId,*/ @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable String variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
 //        this.accountId = accountId;
         this.payerIban = payerIban;
         this.receiverIban = receiverIban;
@@ -97,11 +97,11 @@ public class Payment {
     }
 
     @Nullable
-    public Integer getVariableNumber() {
+    public String getVariableNumber() {
         return variableNumber;
     }
 
-    public void setVariableNumber(@Nullable Integer variableNumber) {
+    public void setVariableNumber(@Nullable String variableNumber) {
         this.variableNumber = variableNumber;
     }
 

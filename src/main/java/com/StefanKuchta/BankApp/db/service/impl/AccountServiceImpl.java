@@ -1,6 +1,7 @@
 package com.StefanKuchta.BankApp.db.service.impl;
 
 import com.StefanKuchta.BankApp.db.repository.AccountRepository;
+import com.StefanKuchta.BankApp.db.repository.CentralIbanDbRepository;
 import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.db.service.api.AccountService;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,11 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final CentralIbanDbRepository centralIbanDbRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, CentralIbanDbRepository centralIbanDbRepository) {
         this.accountRepository = accountRepository;
+        this.centralIbanDbRepository = centralIbanDbRepository;
     }
 
     @Override
@@ -27,7 +30,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long addUserAndReturnId(Account account) {
-        return accountRepository.createAccount(account);
+    public Long addAccountAndReturnId(Account account) {
+        Long id = accountRepository.createAccountAndReturnGeneratedId(account);
+        centralIbanDbRepository.addIbanToCentralIbanDb(accountRepository.getIbanFromId(id));
+        return id;
     }
 }

@@ -37,6 +37,31 @@ public class AccountRepository {
         return jdbcTemplate.queryForObject(sql, accountRowMapper);
     }
 
+    public String getIbanFromId(Long id) {
+        final String sql = "SELECT iban FROM account WHERE account.id = " + id;
+        return jdbcTemplate.queryForObject(sql, String.class);
+    }
+
+    public boolean checkIfAccountExist(String iban) {
+        final String sql = "SELECT iban FROM account WHERE account.iban = '" + iban + "'";
+        try {
+            jdbcTemplate.queryForObject(sql, String.class);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+//    public boolean checkIfAccountExist(String iban) {
+//        final String sql = "SELECT iban FROM account WHERE account.iban = ?";
+//        try {
+//            jdbcTemplate.queryForObject(sql, new Object[] { iban }, String.class);
+//            return true;
+//        } catch (EmptyResultDataAccessException e) {
+//            return false;
+//        }
+//    }
+
     public Long getIdFromIban(String iban) {
         final String sql = "SELECT id FROM account WHERE account.iban = '" + iban + "'";
         try {
@@ -60,33 +85,20 @@ public class AccountRepository {
         jdbcTemplate.update(sql, balance, accountId);
     }
 
-    public Long createAccount(Account account) {
+    public Long createAccountAndReturnGeneratedId(Account account) {
         final String sql = "INSERT INTO account (user_id, iban, name, balance) VALUES (?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-// Vytvorene pomocou anonymnej vnorenej triedy
-//        jdbcTemplate.update(new PreparedStatementCreator() {
-//            @Override
-//            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-//                PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-//                ps.setLong(1, account.getUserId());
-//                ps.setString(2, ibanGenerator.generateIban());
-//                ps.setString(3, account.getName());
-//                ps.setDouble(4, 0);
-//                return ps;
-//            }
-//        }, keyHolder);
-//        if (keyHolder.getKey() != null) {
-//            return keyHolder.getKey().longValue();
-//        } else {
-//            return null;
-//        }
-
-        // vytvorene pomocou lambda vyrazu
         jdbcTemplate.update((Connection con) -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setLong(1, account.getUserId());
-            ps.setString(2, ibanGenerator.generateIban());
+            String iban = ibanGenerator.generateIban();
+            if (checkIfAccountExist(iban)) {
+                while (checkIfAccountExist(iban)) {
+                    iban = ibanGenerator.generateIban();
+                }
+            }
+            ps.setString(2, iban);
             ps.setString(3, account.getName());
             ps.setDouble(4, 0);
             return ps;
@@ -105,7 +117,13 @@ public class AccountRepository {
         jdbcTemplate.update((Connection con) -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setLong(1, id);
-            ps.setString(2, ibanGenerator.generateIban());
+            String iban = ibanGenerator.generateIban();
+            if (checkIfAccountExist(iban)) {
+                while (checkIfAccountExist(iban)) {
+                    iban = ibanGenerator.generateIban();
+                }
+            }
+            ps.setString(2, iban);
             ps.setString(3, "bank account");
             ps.setDouble(4, 0);
             return ps;
