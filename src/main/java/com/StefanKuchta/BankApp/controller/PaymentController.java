@@ -22,7 +22,7 @@ public class PaymentController {
     }
 
     @GetMapping
-    public ResponseEntity getAllPayments() {
+    public ResponseEntity<List<Payment>> getAllPayments() {
         List<Payment> paymentList = paymentService.getAllPayments();
         return new ResponseEntity<>(paymentList, HttpStatus.OK);
     }

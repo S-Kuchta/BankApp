@@ -25,17 +25,9 @@ public class SendPaymentResponse {
         return success;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
     @Nullable
     public String getErrorMessage() {
         return errorMessage;
-    }
-
-    public void setErrorMessage(@Nullable String errorMessage) {
-        this.errorMessage = errorMessage;
     }
 
     @Override

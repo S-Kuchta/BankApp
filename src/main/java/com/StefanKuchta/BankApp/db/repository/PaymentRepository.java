@@ -53,9 +53,7 @@ public class PaymentRepository {
             ps.setDouble(4, payment.getAmount());
             ps.setString(5, payment.getInformation());
             ps.setString(6, payment.getVariableNumber());
-            if(payment.getPayedAt() == null) {
-                payment.setPayedAt(Timestamp.from(Instant.now()));
-            }
+            payment.setPayedAt(Timestamp.from(Instant.now()));
             ps.setTimestamp(7, payment.getPayedAt());
             ps.setString(8, type);
             return ps;

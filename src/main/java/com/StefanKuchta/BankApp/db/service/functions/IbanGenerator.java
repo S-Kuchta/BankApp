@@ -8,10 +8,6 @@ public class IbanGenerator {
         StringBuilder ibanNumber = new StringBuilder();
         ibanNumber.append("SK227700000000");
         for (int i = 0; i < 10; i++) {
-//            if(i == 2 || i == 7) {
-//                ibanNumber.append(" ");
-//                continue;
-//            }
             int randomNumber = getRandomValue(1,9);
             ibanNumber.append(randomNumber);
         }
