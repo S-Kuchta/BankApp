@@ -20,7 +20,7 @@ public class CentralIbanDbRepository {
     }
 
     public boolean checkIfIbanExist(String iban) {
-        final String sql = "SELECT iban FROM centra_iban_db WHERE central_iban_db.iban = '" + iban + "'";
+        final String sql = "SELECT iban FROM central_iban_db WHERE central_iban_db.iban = '" + iban + "'";
         try {
             jdbcTemplate.queryForObject(sql, String.class);
             return true;

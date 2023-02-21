@@ -1,12 +1,15 @@
 package com.StefanKuchta.BankApp.db.service.impl;
 
 import com.StefanKuchta.BankApp.db.repository.AccountRepository;
+import com.StefanKuchta.BankApp.db.repository.CentralIbanDbRepository;
 import com.StefanKuchta.BankApp.db.repository.PaymentRepository;
 import com.StefanKuchta.BankApp.db.service.api.PaymentService;
 import com.StefanKuchta.BankApp.db.service.api.response.SendPaymentResponse;
 
+import com.StefanKuchta.BankApp.db.service.enums.TransactionType;
 import com.StefanKuchta.BankApp.db.service.functions.CheckIfIbanBelongToBank;
 import com.StefanKuchta.BankApp.domain.Payment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +20,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
+    private final CentralIbanDbRepository centralIbanDbRepository;
     private final Payment payment = new Payment();
 
-    public PaymentServiceImpl(AccountRepository accountRepository, PaymentRepository paymentRepository) {
+    public PaymentServiceImpl(AccountRepository accountRepository, PaymentRepository paymentRepository, CentralIbanDbRepository centralIbanDbRepository) {
         this.accountRepository = accountRepository;
         this.paymentRepository = paymentRepository;
+        this.centralIbanDbRepository = centralIbanDbRepository;
     }
 
 
@@ -30,45 +35,35 @@ public class PaymentServiceImpl implements PaymentService {
         String payerIban = payment.getPayerIban();
         String receiverIban = payment.getReceiverIban();
         Long payerId = accountRepository.getIdFromIban(payerIban);
-        Long receiverId = accountRepository.getIdFromIban(receiverIban);
         Double amount = payment.getAmount();
         double totalPayerBalance = accountRepository.getBalance(payerId) - amount;
 
 
+        if(!centralIbanDbRepository.checkIfIbanExist(receiverIban)) {
+            return new SendPaymentResponse(false,"Iban doesn't exist in central IBAN database");
+        }
 
         if(amount <= accountRepository.getBalance(payerId)) {
-            if(!accountRepository.checkIfAccountExist(receiverIban)) {
+            if(accountRepository.checkIfAccountExist(receiverIban)) {
+                receivePayment(payment);
+            }
 
-            } else if(/*CheckIfIbanBelongToBank.ibanCheck(receiverIban)*/accountRepository.checkIfAccountExist(receiverIban)) {
-                double totalReceiverBalance = accountRepository.getBalance(receiverId) + amount;
-//                accountRepository.setBalance(payerId, totalPayerBalance);
-//                paymentRepository.addPaymentToPaymentHistory(payment, payerId, "debt");
-                accountRepository.setBalance(receiverId, totalReceiverBalance);
-                paymentRepository.addPaymentToPaymentHistory(payment, receiverId, "credit");
-            } /*else {*/
-                accountRepository.setBalance(payerId, totalPayerBalance);
-                paymentRepository.addPaymentToPaymentHistory(payment, payerId, "debt");
-//            }
-
+            accountRepository.setBalance(payerId, totalPayerBalance);
+            paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBT.getType());
             return new SendPaymentResponse(true);
         } else {
             return new SendPaymentResponse(false, "Account with id: " + payerId + " don't have enough money.");
         }
-
-
-
-
-
     }
 
     @Override
     public Long receivePayment(Payment payment) {
-        Long accountId = accountRepository.getIdFromIban(payment.getReceiverIban());
-        double totalBalance = accountRepository.getBalance(accountId) + payment.getAmount();
+        Long receiverId = accountRepository.getIdFromIban(payment.getReceiverIban());
+        double totalReceiverBalance = accountRepository.getBalance(receiverId) + payment.getAmount();
 
         if(CheckIfIbanBelongToBank.ibanCheck(payment.getReceiverIban())) {
-            accountRepository.setBalance(accountId, totalBalance);
-            return paymentRepository.addPaymentToPaymentHistory(payment, accountId);
+            accountRepository.setBalance(receiverId, totalReceiverBalance);
+            return paymentRepository.addPaymentToPaymentHistory(payment, receiverId, TransactionType.CREDIT.getType());
         } else {
             return null;
         }
