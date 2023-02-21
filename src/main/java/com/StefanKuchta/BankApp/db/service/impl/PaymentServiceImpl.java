@@ -38,14 +38,14 @@ public class PaymentServiceImpl implements PaymentService {
         double totalPayerBalance = accountRepository.getBalance(payerId) - amount;
 
 
-        if(!centralIbanDbRepository.checkIfIbanExist(receiverIban)) {
-            return new SendPaymentResponse(false,"Iban does not exist in central IBAN database. Payment does not proceed.");
+        if (!centralIbanDbRepository.checkIfIbanExist(receiverIban)) {
+            return new SendPaymentResponse(false, "Iban does not exist in central IBAN database. Payment does not proceed.");
         }
 
-        if(amount <= accountRepository.getBalance(payerId)) {
+        if (amount <= accountRepository.getBalance(payerId)) {
             accountRepository.setBalance(payerId, totalPayerBalance);
             paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBT.getType());
-            if(accountRepository.checkIfAccountExist(receiverIban)) {
+            if (accountRepository.checkIfAccountExist(receiverIban)) {
                 receivePayment(payment);
             }
             return new SendPaymentResponse(true);
@@ -59,7 +59,7 @@ public class PaymentServiceImpl implements PaymentService {
         Long receiverId = accountRepository.getIdFromIban(payment.getReceiverIban());
         double totalReceiverBalance = accountRepository.getBalance(receiverId) + payment.getAmount();
 
-        if(CheckIfIbanBelongsToBank.ibanCheck(payment.getReceiverIban())) {
+        if (CheckIfIbanBelongsToBank.ibanCheck(payment.getReceiverIban())) {
             accountRepository.setBalance(receiverId, totalReceiverBalance);
             return paymentRepository.addPaymentToPaymentHistory(payment, receiverId, TransactionType.CREDIT.getType());
         } else {
@@ -69,10 +69,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<Payment> getAllPayments() {
-//        payment.setPayerIban(BeautyIban.beautyIban(payment.getPayerIban()));
-//        payment.setReceiverIban(BeautyIban.beautyIban(payment.getReceiverIban()));
         return paymentRepository.getAllPayments();
+    }
 
-
+    @Override
+    public List<Payment> getPaymentsByAccountIdAndTypeOfTransaction(long id, String type) {
+        return paymentRepository.getPaymentsByAccountIdAndTypeOfTransaction(id, type);
     }
 }

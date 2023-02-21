@@ -1,6 +1,7 @@
 package com.StefanKuchta.BankApp.db.repository;
 
 import com.StefanKuchta.BankApp.db.mapper.PaymentRowMapper;
+import com.StefanKuchta.BankApp.db.service.enums.TransactionType;
 import com.StefanKuchta.BankApp.domain.Payment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -29,32 +30,17 @@ public class PaymentRepository {
         return jdbcTemplate.query(sql,paymentRowMapper);
     }
 
+    public List<Payment> getPaymentsByAccountIdAndTypeOfTransaction(Long id, String type) {
+        String sql;
+        if(type.equals(TransactionType.ALL.getType())) {
+            sql = "SELECT * FROM payment WHERE payment.account_id = " + id;
+        } else {
+            sql = "SELECT * FROM payment WHERE payment.account_id = " + id + " AND payment.type = '" + type + "'";
+        }
+        return jdbcTemplate.query(sql, paymentRowMapper);
+    }
 
-//    public Long addPaymentToPaymentHistory(Payment payment, long accountId) {
-//        final String sql = "INSERT INTO payment(account_id, payer_iban, receiver_iban, amount, information, variable_number, payed_at, type) VALUES (?,?,?,?,?,?,?,?)";
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//
-//        jdbcTemplate.update((Connection con) -> {
-//            PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-//            ps.setLong(1, accountId);
-//            ps.setString(2, payment.getPayerIban());
-//            ps.setString(3, payment.getReceiverIban());
-//            ps.setDouble(4, payment.getAmount());
-//            ps.setString(5, payment.getInformation());
-//            ps.setString(6, payment.getVariableNumber());
-//            if(payment.getPayedAt() == null) {
-//                payment.setPayedAt(Timestamp.from(Instant.now()));
-//            }
-//            ps.setTimestamp(7, payment.getPayedAt());
-//            ps.setString(8, payment.getType());
-//            return ps;
-//        }, keyHolder);
-//        if(keyHolder.getKey() != null) {
-//            return keyHolder.getKey().longValue();
-//        } else {
-//            return null;
-//        }
-//    }
+
 
     public Long addPaymentToPaymentHistory(Payment payment, long accountId, String type) {
         final String sql = "INSERT INTO payment(account_id, payer_iban, receiver_iban, amount, information, variable_number, payed_at, type) VALUES (?,?,?,?,?,?,?,?)";
