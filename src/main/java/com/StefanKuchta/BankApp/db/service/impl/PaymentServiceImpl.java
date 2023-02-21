@@ -44,12 +44,11 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         if(amount <= accountRepository.getBalance(payerId)) {
+            accountRepository.setBalance(payerId, totalPayerBalance);
+            paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBT.getType());
             if(accountRepository.checkIfAccountExist(receiverIban)) {
                 receivePayment(payment);
             }
-
-            accountRepository.setBalance(payerId, totalPayerBalance);
-            paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBT.getType());
             return new SendPaymentResponse(true);
         } else {
             return new SendPaymentResponse(false, "Account with id: " + payerId + " don't have enough money.");
