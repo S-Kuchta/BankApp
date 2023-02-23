@@ -33,13 +33,22 @@ public class UserRepository {
         }
     }
 
+    public Long checkEmailAndPassword(String email, String password) {
+        final String sql = "SELECT id FROM user WHERE user.email = '" + email + "' AND user.password = '" + password + "'";
+        try {
+            return Long.valueOf(jdbcTemplate.queryForObject(sql, String.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     public List<User> getAllUsers() {
         final String sql = "SELECT * FROM user";
         return jdbcTemplate.query(sql, userRowMapper);
     }
 
     public Long addUserAndReturnId(User user) {
-        final String sql = "INSERT INTO user(name, surname, email, tel_number) VALUES (?,?,?,?)";
+        final String sql = "INSERT INTO user(name, surname, email, tel_number, password) VALUES (?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(new PreparedStatementCreator() {
