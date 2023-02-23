@@ -9,6 +9,7 @@ import com.StefanKuchta.BankApp.db.service.api.response.SendPaymentResponse;
 import com.StefanKuchta.BankApp.db.service.enums.TransactionType;
 import com.StefanKuchta.BankApp.db.service.functions.CheckIfIbanBelongsToBank;
 import com.StefanKuchta.BankApp.domain.Payment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +18,20 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
 
 
+
+
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
     private final CentralIbanDbRepository centralIbanDbRepository;
-    private final Payment payment = new Payment();
 
+//    private final Payment payment = new Payment();
+
+    @Autowired
     public PaymentServiceImpl(AccountRepository accountRepository, PaymentRepository paymentRepository, CentralIbanDbRepository centralIbanDbRepository) {
         this.accountRepository = accountRepository;
         this.paymentRepository = paymentRepository;
         this.centralIbanDbRepository = centralIbanDbRepository;
     }
-
 
     @Override
     public SendPaymentResponse sendPayment(Payment payment) {
@@ -36,7 +40,6 @@ public class PaymentServiceImpl implements PaymentService {
         Long payerId = accountRepository.getIdFromIban(payerIban);
         Double amount = payment.getAmount();
         double totalPayerBalance = accountRepository.getBalance(payerId) - amount;
-
 
         if (!centralIbanDbRepository.checkIfIbanExist(receiverIban)) {
             return new SendPaymentResponse(false, "Iban does not exist in central IBAN database. Payment does not proceed.");

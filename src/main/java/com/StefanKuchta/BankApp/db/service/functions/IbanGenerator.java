@@ -1,6 +1,10 @@
 package com.StefanKuchta.BankApp.db.service.functions;
 
+
+import org.springframework.stereotype.Component;
+
 import java.util.concurrent.ThreadLocalRandom;
+
 
 public class IbanGenerator {
 

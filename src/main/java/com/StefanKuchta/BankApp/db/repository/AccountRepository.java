@@ -4,6 +4,7 @@ import com.StefanKuchta.BankApp.db.mapper.AccountRowMapper;
 import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.db.service.functions.IbanGenerator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +24,8 @@ public class AccountRepository {
     private final AccountRowMapper accountRowMapper = new AccountRowMapper();
     private final IbanGenerator ibanGenerator = new IbanGenerator();
 
+
+    @Autowired
     public AccountRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

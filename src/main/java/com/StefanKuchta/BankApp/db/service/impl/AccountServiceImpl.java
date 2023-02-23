@@ -4,6 +4,7 @@ import com.StefanKuchta.BankApp.db.repository.AccountRepository;
 import com.StefanKuchta.BankApp.db.repository.CentralIbanDbRepository;
 import com.StefanKuchta.BankApp.domain.Account;
 import com.StefanKuchta.BankApp.db.service.api.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final CentralIbanDbRepository centralIbanDbRepository;
 
+    @Autowired
     public AccountServiceImpl(AccountRepository accountRepository, CentralIbanDbRepository centralIbanDbRepository) {
         this.accountRepository = accountRepository;
         this.centralIbanDbRepository = centralIbanDbRepository;
