@@ -2,7 +2,8 @@ package com.StefanKuchta.BankApp.db.service.enums;
 
 public enum TransactionType {
     CREDIT("credit"),
-    DEBT("debt");
+    DEBT("debt"),
+    ALL("all");
 
     private final String type;
 

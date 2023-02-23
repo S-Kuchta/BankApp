@@ -1,8 +1,6 @@
 package com.StefanKuchta.BankApp.db.repository;
 
-import com.StefanKuchta.BankApp.domain.CentralIbanDb;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 

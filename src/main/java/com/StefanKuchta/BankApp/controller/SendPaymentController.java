@@ -22,7 +22,7 @@ public class SendPaymentController {
     }
 
     @PostMapping
-    public ResponseEntity SendPaymentController(@RequestBody Payment payment) {
+    public ResponseEntity<String> sendPayment(@RequestBody Payment payment) {
         SendPaymentResponse sendPaymentResponse = paymentService.sendPayment(payment);
         if(sendPaymentResponse.isSuccess()) {
             return ResponseEntity.ok().build();

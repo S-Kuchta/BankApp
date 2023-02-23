@@ -12,4 +12,6 @@ public interface PaymentService {
     Long receivePayment(Payment payment);
 
     List<Payment> getAllPayments();
+
+    List<Payment> getPaymentsByAccountIdAndTypeOfTransaction(long id, String type);
 }

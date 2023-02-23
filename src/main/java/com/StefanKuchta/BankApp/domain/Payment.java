@@ -2,9 +2,11 @@ package com.StefanKuchta.BankApp.domain;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+
 
 public class Payment {
 
@@ -31,8 +33,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(/*@Nullable Long accountId,*/ @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable String variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
-//        this.accountId = accountId;
+    public Payment(@Nullable Long accountId, @NonNull String payerIban, @NonNull String receiverIban, @NonNull Double amount, @Nullable String information, @Nullable String variableNumber, @NonNull Timestamp payedAt, @NonNull String type) {
+        this.accountId = accountId;
         this.payerIban = payerIban;
         this.receiverIban = receiverIban;
         this.amount = amount;
