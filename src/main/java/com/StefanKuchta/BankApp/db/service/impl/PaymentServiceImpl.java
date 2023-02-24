@@ -3,6 +3,7 @@ package com.StefanKuchta.BankApp.db.service.impl;
 import com.StefanKuchta.BankApp.db.repository.AccountRepository;
 import com.StefanKuchta.BankApp.db.repository.CentralIbanDbRepository;
 import com.StefanKuchta.BankApp.db.repository.PaymentRepository;
+import com.StefanKuchta.BankApp.db.service.LoggedUser;
 import com.StefanKuchta.BankApp.db.service.api.PaymentService;
 import com.StefanKuchta.BankApp.db.service.api.response.SendPaymentResponse;
 
@@ -23,27 +24,30 @@ public class PaymentServiceImpl implements PaymentService {
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
     private final CentralIbanDbRepository centralIbanDbRepository;
+    private final LoggedUser loggedUser;
 
-//    private final Payment payment = new Payment();
 
     @Autowired
-    public PaymentServiceImpl(AccountRepository accountRepository, PaymentRepository paymentRepository, CentralIbanDbRepository centralIbanDbRepository) {
+    public PaymentServiceImpl(AccountRepository accountRepository, PaymentRepository paymentRepository, CentralIbanDbRepository centralIbanDbRepository, LoggedUser loggedUser) {
         this.accountRepository = accountRepository;
         this.paymentRepository = paymentRepository;
         this.centralIbanDbRepository = centralIbanDbRepository;
+        this.loggedUser = loggedUser;
     }
 
     @Override
     public SendPaymentResponse sendPayment(Payment payment) {
-        String payerIban = payment.getPayerIban();
         String receiverIban = payment.getReceiverIban();
-        Long payerId = accountRepository.getIdFromIban(payerIban);
+        Long payerId = loggedUser.getId();
+        payment.setPayerIban(accountRepository.getIbanFromId(payerId));
         Double amount = payment.getAmount();
         double totalPayerBalance = accountRepository.getBalance(payerId) - amount;
 
         if (!centralIbanDbRepository.checkIfIbanExist(receiverIban)) {
             return new SendPaymentResponse(false, "Iban does not exist in central IBAN database. Payment does not proceed.");
         }
+
+
 
         if (amount <= accountRepository.getBalance(payerId)) {
             accountRepository.setBalance(payerId, totalPayerBalance);

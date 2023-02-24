@@ -16,7 +16,6 @@ public class LogInController {
     private final LogInService logInService;
     private final LoggedUser loggedUser;
 
-
     public LogInController(LogInService logInService, LoggedUser loggedUser) {
         this.logInService = logInService;
         this.loggedUser = loggedUser;
@@ -26,7 +25,7 @@ public class LogInController {
     public ResponseEntity<String> logInUser(@RequestBody LogInData logInData) {
         LogInUserResponse logInUserResponse = logInService.logInRequest(logInData);
         if(logInUserResponse.isSuccessful()){
-            return new ResponseEntity<>("Successfully log in", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Successfully log in", HttpStatus.SEE_OTHER);
         } else {
             return new ResponseEntity<>(logInUserResponse.getErrorMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -35,7 +34,11 @@ public class LogInController {
     @GetMapping()
     public ResponseEntity<Long> getLoggedInUser() {
         Long id = loggedUser.getId();
-        return new ResponseEntity<>(id,HttpStatus.OK);
+        if(id == null) {
+            return new ResponseEntity<>(null,HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        }
     }
 
 }
