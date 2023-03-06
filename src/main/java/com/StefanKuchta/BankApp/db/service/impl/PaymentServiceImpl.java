@@ -19,8 +19,6 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
 
 
-
-
     private final AccountRepository accountRepository;
     private final PaymentRepository paymentRepository;
     private final CentralIbanDbRepository centralIbanDbRepository;
@@ -47,11 +45,9 @@ public class PaymentServiceImpl implements PaymentService {
             return new SendPaymentResponse(false, "Iban does not exist in central IBAN database. Payment does not proceed.");
         }
 
-
-
         if (amount <= accountRepository.getBalance(payerId)) {
             accountRepository.setBalance(payerId, totalPayerBalance);
-            paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBT.getType());
+            paymentRepository.addPaymentToPaymentHistory(payment, payerId, TransactionType.DEBIT.getType());
             if (accountRepository.checkIfAccountExist(receiverIban)) {
                 receivePayment(payment);
             }

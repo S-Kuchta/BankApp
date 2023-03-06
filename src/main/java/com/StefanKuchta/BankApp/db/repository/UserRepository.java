@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -36,7 +37,7 @@ public class UserRepository {
     public Long checkEmailAndPassword(String email, String password) {
         final String sql = "SELECT id FROM user WHERE user.email = '" + email + "' AND user.password = '" + password + "'";
         try {
-            return Long.valueOf(jdbcTemplate.queryForObject(sql, String.class));
+            return Long.valueOf(Objects.requireNonNull(jdbcTemplate.queryForObject(sql, String.class)));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -71,37 +72,6 @@ public class UserRepository {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

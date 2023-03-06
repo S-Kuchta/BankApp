@@ -22,7 +22,6 @@ public class AccountRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final AccountRowMapper accountRowMapper = new AccountRowMapper();
-    private final IbanGenerator ibanGenerator = new IbanGenerator();
 
 
     @Autowired
@@ -95,10 +94,10 @@ public class AccountRepository {
         jdbcTemplate.update((Connection con) -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setLong(1, account.getUserId());
-            String iban = ibanGenerator.generateIban();
+            String iban = IbanGenerator.generateIban();
             if (checkIfAccountExist(iban)) {
                 while (checkIfAccountExist(iban)) {
-                    iban = ibanGenerator.generateIban();
+                    iban = IbanGenerator.generateIban();
                 }
             }
             ps.setString(2, iban);
@@ -120,10 +119,10 @@ public class AccountRepository {
         jdbcTemplate.update((Connection con) -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setLong(1, id);
-            String iban = ibanGenerator.generateIban();
+            String iban = IbanGenerator.generateIban();
             if (checkIfAccountExist(iban)) {
                 while (checkIfAccountExist(iban)) {
-                    iban = ibanGenerator.generateIban();
+                    iban = IbanGenerator.generateIban();
                 }
             }
             ps.setString(2, iban);

@@ -31,9 +31,13 @@ public class PaymentController {
     }
 
     @GetMapping(/*"{id}/*/"{type}")
-    public ResponseEntity<List<Payment>> getPaymentsByAccountIdAndTypeOfTransaction(/*@PathVariable ("id") long id, */@PathVariable String type) {
+    public ResponseEntity getPaymentsByAccountIdAndTypeOfTransaction(/*@PathVariable ("id") long id, */@PathVariable String type) {
 //        List<Payment> paymentList = paymentService.getPaymentsByAccountIdAndTypeOfTransaction(id, type);
         List<Payment> paymentList = paymentService.getPaymentsByAccountIdAndTypeOfTransaction(loggedUser.getId(), type);
-        return new ResponseEntity<>(paymentList, HttpStatus.OK);
+        if(loggedUser.getId() == null) {
+            return new ResponseEntity<>("You are not logged in", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(paymentList, HttpStatus.OK);
+        }
     }
 }

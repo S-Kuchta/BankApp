@@ -24,6 +24,7 @@ public class LogInServiceImpl implements LogInService {
     public LogInUserResponse logInRequest(LogInData logInData) {
         Long id = userRepository.checkEmailAndPassword(logInData.email(),logInData.password());
         if(id == null) {
+            loggedUser.setId(null);
             return new LogInUserResponse(false, "Entered bad email or password.");
         } else {
             loggedUser.setId(id);
