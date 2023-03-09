@@ -8,7 +8,7 @@ import java.util.Objects;
 public class SendPaymentResponse {
 
     @NonNull
-    private boolean success;
+    private final boolean success;
     @Nullable
     private String errorMessage;
 

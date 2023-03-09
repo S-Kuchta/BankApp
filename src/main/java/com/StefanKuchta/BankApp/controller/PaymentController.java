@@ -1,5 +1,6 @@
 package com.StefanKuchta.BankApp.controller;
 
+import com.StefanKuchta.BankApp.db.service.LoggedUser;
 import com.StefanKuchta.BankApp.db.service.api.PaymentService;
 import com.StefanKuchta.BankApp.domain.Payment;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,11 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final LoggedUser loggedUser;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, LoggedUser loggedUser) {
         this.paymentService = paymentService;
+        this.loggedUser = loggedUser;
     }
 
     @GetMapping
@@ -27,9 +30,14 @@ public class PaymentController {
         return new ResponseEntity<>(paymentList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}/{type}")
-    public ResponseEntity<List<Payment>> getPaymentsByAccountIdAndTypeOfTransaction(@PathVariable ("id") long id, @PathVariable String type) {
-        List<Payment> paymentList = paymentService.getPaymentsByAccountIdAndTypeOfTransaction(id, type);
-        return new ResponseEntity<>(paymentList, HttpStatus.OK);
+    @GetMapping(/*"{id}/*/"{type}")
+    public ResponseEntity getPaymentsByAccountIdAndTypeOfTransaction(/*@PathVariable ("id") long id, */@PathVariable String type) {
+//        List<Payment> paymentList = paymentService.getPaymentsByAccountIdAndTypeOfTransaction(id, type);
+        List<Payment> paymentList = paymentService.getPaymentsByAccountIdAndTypeOfTransaction(loggedUser.getId(), type);
+        if(loggedUser.getId() == null) {
+            return new ResponseEntity<>("You are not logged in", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            return new ResponseEntity<>(paymentList, HttpStatus.OK);
+        }
     }
 }
